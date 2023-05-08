@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file      : Gimbal.h
+ * @file      : Shoot.h
  * @brief     :
  * @history   :
  *  Version     Date            Author          Note
@@ -13,8 +13,8 @@
  *******************************************************************************
  */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __GIMBAL_H_
-#define __GIMBAL_H_
+#ifndef __SHOOT_H_
+#define __SHOOT_H_
 
 #ifdef __cplusplus
 
@@ -23,19 +23,21 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-class Gimbal_t
+class Shoot_t
 {
    public:
-    PID_Def Gimbal_Position[2];
-    PID_Def Gimbal_Speed[2];
-    PID_Def Gimbal_Current[2];
-
-    void Stop();
+    PID_Def Friction_Speed[2];
+    PID_Def Trigger_Position;
+    PID_Def Trigger_Speed;
+    PID_Def Trigger_Current;
+    void FrictionControl();
+    void TriggerControl();
     void Control();
-    void AngleCalc();
-    void SpeedCalc();
-    void CurrentCalc();
+    void Stop();
+
+   private:
 };
+
 /* Exported variables --------------------------------------------------------*/
 /* Exported function prototypes ----------------------------------------------*/
 

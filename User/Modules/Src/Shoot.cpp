@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file      : Gimbal.cpp
+ * @file      : Shoot.cpp
  * @brief     :
  * @history   :
  *  Version     Date            Author          Note
@@ -13,7 +13,7 @@
  *******************************************************************************
  */
 /* Includes ------------------------------------------------------------------*/
-#include "Gimbal.h"
+#include "Shoot.h"
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private types -------------------------------------------------------------*/
@@ -21,43 +21,42 @@
 /* External variables --------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 
-void Gimbal_t::AngleCalc()
+void Shoot_t::FrictionControl()
 {
+    Friction_Speed[0].ref = 0.0f;
+    Friction_Speed[1].ref = 0.0f;
+
     for (short i = 0; i < 2; ++i) {
-        Gimbal_Position[i].ref = 0.0f;
-        Gimbal_Position[i].fdb = 0.0f;
-        Gimbal_Position[i].NormalCalc();
+        Friction_Speed[i].fdb = 0.0f;
+        Friction_Speed[i].NormalCalc();
     }
 }
 
-void Gimbal_t::SpeedCalc()
+void Shoot_t::TriggerControl()
 {
-    for (short i = 0; i < 2; ++i) {
-        Gimbal_Speed[i].ref = Gimbal_Position[i].output;
-        Gimbal_Speed[i].fdb = 0.0f;
-        Gimbal_Speed[i].NormalCalc();
-    }
+    Trigger_Position.ref = 0.0f;
+    Trigger_Position.fdb = 0.0f;
+    Trigger_Position.NormalCalc();
+
+    Trigger_Speed.ref = Trigger_Position.output;
+    Trigger_Speed.fdb = 0.0f;
+    Trigger_Speed.NormalCalc();
+
+    Trigger_Current.ref = Trigger_Speed.output;
+    Trigger_Current.fdb = 0.0f;
+    Trigger_Current.NormalCalc();
 }
 
-void Gimbal_t::CurrentCalc()
+void Shoot_t::Control()
 {
-    for (short i = 0; i < 2; ++i) {
-        Gimbal_Current[i].ref = Gimbal_Speed[i].output;
-        Gimbal_Current[i].fdb = 0.0f;
-        Gimbal_Current[i].NormalCalc();
-    }
+    FrictionControl();
+    TriggerControl();
 }
 
-void Gimbal_t::Stop()
+void Shoot_t::Stop()
 {
     for (short i = 0; i < 2; ++i) {
-        Gimbal_Current[i].output = 0.0f;
+        Friction_Speed[i].output = 0.0f;
     }
-}
-
-void Gimbal_t::Control()
-{
-    AngleCalc();
-    SpeedCalc();
-    CurrentCalc();
+    Trigger_Current.output = 0.0f;
 }
