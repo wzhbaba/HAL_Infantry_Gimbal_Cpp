@@ -28,7 +28,7 @@
  * @retval      None
  * @note        None
  */
-float PID_Def::NormalCalc()
+void PID_Def::NormalCalc()
 {
     err[0] = ref - fdb;
     component[0] = kp * err[0];
@@ -43,6 +43,4 @@ float PID_Def::NormalCalc()
 
     VAL_LIMIT(output, -output_max, output_max);
     err[1] = err[0];
-
-    return output;
 }

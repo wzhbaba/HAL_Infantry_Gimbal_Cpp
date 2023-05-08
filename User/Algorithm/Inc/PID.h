@@ -45,10 +45,7 @@ class PID_Def
     float kd_max;
     float output_max;
 
-    float component[3];
-    float err[6];
-
-    float NormalCalc();
+    void NormalCalc();
     void Set(float _kp, float _ki, float _kd, float _kp_m, float _ki_m, float _kd_m, float _output_m)
     {
         kp = _kp;
@@ -61,6 +58,8 @@ class PID_Def
     }
 
    private:
+    float component[3];
+    float err[6];
 };
 
 /* Exported variables --------------------------------------------------------*/
