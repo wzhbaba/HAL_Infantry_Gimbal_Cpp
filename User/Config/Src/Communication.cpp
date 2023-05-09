@@ -14,6 +14,8 @@
  */
 /* Includes ------------------------------------------------------------------*/
 #include "Communication.h"
+
+#include "Chassis.h"
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private types -------------------------------------------------------------*/
@@ -89,6 +91,12 @@ void UserCAN1DataUpdate(CANx_Message* CANx_RxMsg)
 {
     if (CANx_RxMsg->ID == 0x206) {
         Gimbal_Motor[1].Update(CANx_RxMsg->Data);
+        Yaw_Encoder = Gimbal_Motor[1].encode;
+        if (Yaw_Encoder - Target_Encoder > 4096) {
+            Yaw_Encoder -= 8192;
+        } else if (Yaw_Encoder - Target_Encoder < 4096) {
+            Yaw_Encoder += 8192;
+        }
     }
 }
 
