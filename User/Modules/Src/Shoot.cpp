@@ -22,11 +22,51 @@
 Shoot_t Shoot;
 /* Private function prototypes -----------------------------------------------*/
 
+/**
+ * @brief
+ * @param       speed:
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
+void Shoot_t::SetFricSpeed(float speed)
+{
+    Friction_Speed[0].ref = speed;
+    Friction_Speed[1].ref = -speed;
+}
+
+/**
+ * @brief
+ * @param       position:
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
+void Shoot_t::SetTriggerPos(float position)
+{
+    Trigger_Position.ref = Trigger_Position.fdb + position;
+}
+
+/**
+ * @brief
+ * @param       speed:
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
+void Shoot_t::SetTriggerSpeed(float speed)
+{
+    Trigger_Speed.ref = speed;
+}
+
+/**
+ * @brief
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
 void Shoot_t::FrictionControl()
 {
-    Friction_Speed[0].ref = 0.0f;
-    Friction_Speed[1].ref = 0.0f;
-
     for (short i = 0; i < 2; ++i) {
         Friction_Speed[i].fdb = Friction_Motor[i].speed_rpm;
         Friction_Speed[i].NormalCalc();
@@ -37,27 +77,47 @@ void Shoot_t::FrictionControl()
     }
 }
 
+/**
+ * @brief
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
 void Shoot_t::TriggerControl()
 {
-    Trigger_Position.ref = 0.0f;
-    Trigger_Position.fdb = Trigger_Motor.angle_real;
-    Trigger_Position.NormalCalc();
-
-    Trigger_Speed.ref = Trigger_Position.output;
-    Trigger_Speed.fdb = Trigger_Motor.speed_rpm;
-    Trigger_Speed.NormalCalc();
+    if (Shoot_Flag == ANGLE_FLAG) {
+        Trigger_Position.fdb = Trigger_Motor.angle_real;
+        Trigger_Position.NormalCalc();
+        Trigger_Speed.ref = Trigger_Position.output;
+    }
+    if (Shoot_Flag == ANGLE_FLAG || Shoot_Flag == SPEED_FLAG) {
+        Trigger_Speed.fdb = Trigger_Motor.speed_rpm;
+        Trigger_Speed.NormalCalc();
+    }
 
     Trigger_Current.ref = Trigger_Speed.output;
     Trigger_Current.fdb = Trigger_Motor.torque_current;
     Trigger_Current.NormalCalc();
 }
 
+/**
+ * @brief
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
 void Shoot_t::Control()
 {
     FrictionControl();
     TriggerControl();
 }
 
+/**
+ * @brief
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
 void Shoot_t::Stop()
 {
     for (short i = 0; i < 2; ++i) {

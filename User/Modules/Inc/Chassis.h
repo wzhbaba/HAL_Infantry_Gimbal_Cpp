@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file      : Gimbal.h
+ * @file      : Chassis.h
  * @brief     :
  * @history   :
  *  Version     Date            Author          Note
@@ -13,38 +13,55 @@
  *******************************************************************************
  */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __GIMBAL_H_
-#define __GIMBAL_H_
+#ifndef __CHASSIS_H_
+#define __CHASSIS_H_
 
 #ifdef __cplusplus
 
 /* Includes ------------------------------------------------------------------*/
-#include "Dji_Motor.h"
-#include "IMU.h"
-#include "PID.h"
+#include "CommomInc.h"
+#include "arm_math.h"
 /* Exported macro ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-class Gimbal_t
+struct Chassis_s {
+    int16_t x_speed;
+    int16_t y_speed;
+    int16_t r_speed;
+    int16_t x_target;
+    int16_t y_target;
+    int16_t r_target;
+};
+
+class Chassis_t
 {
    public:
-    PID_Def Position[2];
-    PID_Def Speed[2];
-    PID_Def Current[2];
-
-    void Stop();
-    void Control();
-    void AngleCalc();
-    void SpeedCalc();
-    void CurrentCalc();
-    void SetPitchPosition(float set);
-    void SetYawPosition(float set);
+    Chassis_s Pack;
+    PID_Def Chassis_Follow;
+    void FollowCtrl();
 };
+
 /* Exported variables --------------------------------------------------------*/
-extern Gimbal_t Gimbal;
+extern int16_t Yaw_Encoder;
+extern int16_t Target_Encoder;
 
 /* Exported function prototypes ----------------------------------------------*/
 
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported variables --------------------------------------------------------*/
+/* Exported function prototypes ----------------------------------------------*/
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* __FILE_H_ */

@@ -22,6 +22,16 @@
 Gimbal_t Gimbal;
 /* Private function prototypes -----------------------------------------------*/
 
+void Gimbal_t::SetPitchPosition(float set)
+{
+    Position[0].ref = set;
+}
+
+void Gimbal_t::SetYawPosition(float set)
+{
+    Position[1].ref = set;
+}
+
 void Gimbal_t::AngleCalc()
 {
     Position[0].ref = 0.0f;

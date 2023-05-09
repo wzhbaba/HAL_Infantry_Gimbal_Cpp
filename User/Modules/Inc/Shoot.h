@@ -24,6 +24,11 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+typedef enum {
+    ANGLE_FLAG = 0,
+    SPEED_FLAG = 1,
+
+} Shoot_Flag;
 class Shoot_t
 {
    public:
@@ -32,7 +37,11 @@ class Shoot_t
     PID_Def Trigger_Position;
     PID_Def Trigger_Speed;
     PID_Def Trigger_Current;
+    uint16_t Shoot_Flag;
     void FrictionControl();
+    void SetFricSpeed(float speed);
+    void SetTriggerPos(float pos);
+    void SetTriggerSpeed(float speed);
     void TriggerControl();
     void Control();
     void Stop();
