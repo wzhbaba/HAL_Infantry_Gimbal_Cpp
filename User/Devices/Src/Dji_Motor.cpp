@@ -19,6 +19,9 @@
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
+Dji_Motor Gimbal_Motor[2];
+Dji_Motor Trigger_Motor;
+Dji_Motor Friction_Motor[2];
 /* Private function prototypes -----------------------------------------------*/
 
 /**
