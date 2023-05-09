@@ -55,7 +55,7 @@ class PID_Def
         ki_max = _ki_m;
         kd_max = _kd_m;
         output_max = _output_m;
-    }
+    };
 
    private:
     float component[3];
