@@ -55,6 +55,8 @@ osThreadId imuTaskHandle;
 osThreadId refereeTaskHandle;
 osThreadId visionRecTaskHandle;
 osThreadId visionSendTaskHandle;
+osThreadId gimbalTaskHandle;
+osThreadId modeTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -67,6 +69,8 @@ void StartIMUTask(void const *argument);
 void StartRefereeTask(void const *argument);
 void StartVisionRecTask(void const *argument);
 void StartVisionSendTask(void const *argument);
+void StartGimbalTask(void const *argument);
+void StartModeTask(void const *argument);
 
 extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -128,7 +132,7 @@ void MX_FREERTOS_Init(void)
     imuTaskHandle = osThreadCreate(osThread(imuTask), NULL);
 
     /* definition and creation of refereeTask */
-    osThreadDef(refereeTask, StartRefereeTask, osPriorityIdle, 0, 256);
+    osThreadDef(refereeTask, StartRefereeTask, osPriorityRealtime, 0, 256);
     refereeTaskHandle = osThreadCreate(osThread(refereeTask), NULL);
 
     /* definition and creation of visionRecTask */
@@ -138,6 +142,14 @@ void MX_FREERTOS_Init(void)
     /* definition and creation of visionSendTask */
     osThreadDef(visionSendTask, StartVisionSendTask, osPriorityAboveNormal, 0, 256);
     visionSendTaskHandle = osThreadCreate(osThread(visionSendTask), NULL);
+
+    /* definition and creation of gimbalTask */
+    osThreadDef(gimbalTask, StartGimbalTask, osPriorityAboveNormal, 0, 128);
+    gimbalTaskHandle = osThreadCreate(osThread(gimbalTask), NULL);
+
+    /* definition and creation of modeTask */
+    osThreadDef(modeTask, StartModeTask, osPriorityAboveNormal, 0, 128);
+    modeTaskHandle = osThreadCreate(osThread(modeTask), NULL);
 
     /* USER CODE BEGIN RTOS_THREADS */
     /* add threads, ... */
@@ -250,6 +262,42 @@ void StartVisionSendTask(void const *argument)
         osDelay(10);
     }
     /* USER CODE END StartVisionSendTask */
+}
+
+/* USER CODE BEGIN Header_StartGimbalTask */
+/**
+ * @brief Function implementing the gimbalTask thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_StartGimbalTask */
+void StartGimbalTask(void const *argument)
+{
+    /* USER CODE BEGIN StartGimbalTask */
+    GimbalInit();
+    /* Infinite loop */
+    for (;;) {
+        InfantryGimbalTask();
+        osDelay(5);
+    }
+    /* USER CODE END StartGimbalTask */
+}
+
+/* USER CODE BEGIN Header_StartModeTask */
+/**
+ * @brief Function implementing the modeTask thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_StartModeTask */
+void StartModeTask(void const *argument)
+{
+    /* USER CODE BEGIN StartModeTask */
+    /* Infinite loop */
+    for (;;) {
+        osDelay(1);
+    }
+    /* USER CODE END StartModeTask */
 }
 
 /* Private application code --------------------------------------------------*/
