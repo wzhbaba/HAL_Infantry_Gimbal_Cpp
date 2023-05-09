@@ -19,6 +19,7 @@
 #ifdef __cplusplus
 
 /* Includes ------------------------------------------------------------------*/
+#include "Chassis.h"
 #include "DR16.h"
 #include "Gimbal.h"
 #include "Referee.h"
@@ -29,8 +30,8 @@
 class Infantry_Gimbal_t
 {
    public:
-    void Init();
     void Stop();
+    void Control();
 
    private:
 };
@@ -49,7 +50,8 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 /* Exported function prototypes ----------------------------------------------*/
-void Gimbal_Init();
+void GimbalInit();
+void InfantryGimbalTask();
 
 #ifdef __cplusplus
 }

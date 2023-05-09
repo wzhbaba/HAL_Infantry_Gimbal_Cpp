@@ -4,7 +4,7 @@
  * @brief     :
  * @history   :
  *  Version     Date            Author          Note
- *  V0.9.0      yyyy-mm-dd      <author>        1. <note>
+ *  V1.0.0      2023-05-09      Jerry Gong      第一版
  *******************************************************************************
  * @attention :
  *******************************************************************************
@@ -28,7 +28,7 @@ Infantry_Gimbal_t Infantry_Gimbal;
  * @retval      None
  * @note        None
  */
-void Gimbal_Init()
+void GimbalInit()
 {
     Gimbal.Position[0].Set(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     Gimbal.Position[1].Set(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -47,6 +47,31 @@ void Gimbal_Init()
     Shoot.Trigger_Current.Set(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-void GimbalTask()
+/**
+ * @brief
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
+void Infantry_Gimbal_t::Control()
 {
+    Gimbal.Control();
+    Shoot.Control();
+}
+
+/**
+ * @brief
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
+void InfantryGimbalTask()
+{
+    Infantry_Gimbal.Control();
+}
+
+void Infantry_Gimbal_t::Stop()
+{
+    Gimbal.Stop();
+    Shoot.Stop();
 }
