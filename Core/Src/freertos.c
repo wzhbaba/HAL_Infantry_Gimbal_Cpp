@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Communication.h"
+#include "Infantry_Gimbal.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -157,8 +158,10 @@ void StartDefaultTask(void const *argument)
     /* USER CODE BEGIN StartDefaultTask */
     /* Infinite loop */
     for (;;) {
-        vTaskDelete(defaultTaskHandle);
-        osDelay(1);
+        HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);
+        osDelay(500);
+        HAL_GPIO_TogglePin(LED_G_GPIO_Port, LED_G_Pin);
+        osDelay(500);
     }
     /* USER CODE END StartDefaultTask */
 }

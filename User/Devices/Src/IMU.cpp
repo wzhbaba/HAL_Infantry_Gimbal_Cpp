@@ -43,8 +43,8 @@ void IMU_Def::DataPack(uint8_t *pData)
     Gyro[1] = ((float)(int16_t)(pData[18] + (pData[19] << 8)));
     Gyro[2] = ((float)(int16_t)(pData[20] + (pData[21] << 8)));
 
-    Euler[0] = ((float)(int16_t)(pData[23] + (pData[24] << 8))) / 100;
-    Euler[1] = -((float)(int16_t)(pData[25] + (pData[26] << 8))) / 100;
+    Euler[0] = ((float)(int16_t)(pData[23] + (pData[24] << 8))) / 100;   // pitch
+    Euler[1] = -((float)(int16_t)(pData[25] + (pData[26] << 8))) / 100;  // roll
     Yaw = ((float)(int16_t)(pData[27] + (pData[28] << 8))) / 10;
 
     Last_Euler = Now_Euler;
