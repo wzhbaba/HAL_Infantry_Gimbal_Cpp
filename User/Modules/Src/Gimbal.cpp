@@ -19,39 +19,47 @@
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
+Gimbal_t Gimbal;
 /* Private function prototypes -----------------------------------------------*/
 
 void Gimbal_t::AngleCalc()
 {
+    Position[0].ref = 0.0f;
+    Position[1].ref = 0.0f;
+
+    Position[0].fdb = IMU.Euler[0];
+    Position[0].fdb = IMU.Euler[2];
+
     for (short i = 0; i < 2; ++i) {
-        Gimbal_Position[i].ref = 0.0f;
-        Gimbal_Position[i].fdb = 0.0f;
-        Gimbal_Position[i].NormalCalc();
+        Position[i].NormalCalc();
     }
 }
 
 void Gimbal_t::SpeedCalc()
 {
+    Speed[0].ref = Position[0].output;
+    Speed[0].fdb = IMU.Gyro[0];
+    Speed[1].ref = Position[1].output;
+    Speed[1].fdb = IMU.Gyro[1];
+
     for (short i = 0; i < 2; ++i) {
-        Gimbal_Speed[i].ref = Gimbal_Position[i].output;
-        Gimbal_Speed[i].fdb = 0.0f;
-        Gimbal_Speed[i].NormalCalc();
+        Speed[i].NormalCalc();
     }
 }
 
 void Gimbal_t::CurrentCalc()
 {
     for (short i = 0; i < 2; ++i) {
-        Gimbal_Current[i].ref = Gimbal_Speed[i].output;
-        Gimbal_Current[i].fdb = 0.0f;
-        Gimbal_Current[i].NormalCalc();
+        Current[i].ref = Speed[i].output;
+        Current[i].fdb = Gimbal_Motor[i].torque_current;
+        Current[i].NormalCalc();
     }
 }
 
 void Gimbal_t::Stop()
 {
     for (short i = 0; i < 2; ++i) {
-        Gimbal_Current[i].output = 0.0f;
+        Current[i].output = 0.0f;
     }
 }
 

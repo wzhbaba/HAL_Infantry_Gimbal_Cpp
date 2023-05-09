@@ -19,6 +19,8 @@
 #ifdef __cplusplus
 
 /* Includes ------------------------------------------------------------------*/
+#include "Dji_Motor.h"
+#include "IMU.h"
 #include "PID.h"
 /* Exported macro ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -26,9 +28,9 @@
 class Gimbal_t
 {
    public:
-    PID_Def Gimbal_Position[2];
-    PID_Def Gimbal_Speed[2];
-    PID_Def Gimbal_Current[2];
+    PID_Def Position[2];
+    PID_Def Speed[2];
+    PID_Def Current[2];
 
     void Stop();
     void Control();
@@ -37,6 +39,8 @@ class Gimbal_t
     void CurrentCalc();
 };
 /* Exported variables --------------------------------------------------------*/
+extern Gimbal_t Gimbal;
+
 /* Exported function prototypes ----------------------------------------------*/
 
 #endif
