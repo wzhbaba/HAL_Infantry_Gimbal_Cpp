@@ -19,6 +19,7 @@
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
+Shoot_t Shoot;
 /* Private function prototypes -----------------------------------------------*/
 
 void Shoot_t::FrictionControl()
@@ -27,23 +28,27 @@ void Shoot_t::FrictionControl()
     Friction_Speed[1].ref = 0.0f;
 
     for (short i = 0; i < 2; ++i) {
-        Friction_Speed[i].fdb = 0.0f;
+        Friction_Speed[i].fdb = Friction_Motor[i].speed_rpm;
         Friction_Speed[i].NormalCalc();
+
+        Friction_Current[i].ref = Friction_Speed[i].output;
+        Friction_Current[i].fdb = Friction_Motor[i].torque_current;
+        Friction_Current[i].NormalCalc();
     }
 }
 
 void Shoot_t::TriggerControl()
 {
     Trigger_Position.ref = 0.0f;
-    Trigger_Position.fdb = 0.0f;
+    Trigger_Position.fdb = Trigger_Motor.angle_real;
     Trigger_Position.NormalCalc();
 
     Trigger_Speed.ref = Trigger_Position.output;
-    Trigger_Speed.fdb = 0.0f;
+    Trigger_Speed.fdb = Trigger_Motor.speed_rpm;
     Trigger_Speed.NormalCalc();
 
     Trigger_Current.ref = Trigger_Speed.output;
-    Trigger_Current.fdb = 0.0f;
+    Trigger_Current.fdb = Trigger_Motor.torque_current;
     Trigger_Current.NormalCalc();
 }
 

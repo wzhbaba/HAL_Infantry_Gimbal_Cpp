@@ -19,6 +19,7 @@
 #ifdef __cplusplus
 
 /* Includes ------------------------------------------------------------------*/
+#include "Dji_Motor.h"
 #include "PID.h"
 /* Exported macro ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -27,6 +28,7 @@ class Shoot_t
 {
    public:
     PID_Def Friction_Speed[2];
+    PID_Def Friction_Current[2];
     PID_Def Trigger_Position;
     PID_Def Trigger_Speed;
     PID_Def Trigger_Current;
@@ -39,6 +41,7 @@ class Shoot_t
 };
 
 /* Exported variables --------------------------------------------------------*/
+extern Shoot_t Shoot;
 /* Exported function prototypes ----------------------------------------------*/
 
 #endif
