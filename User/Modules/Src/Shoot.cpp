@@ -42,9 +42,9 @@ void Shoot_t::SetFricSpeed(float speed)
  * @retval      None
  * @note        None
  */
-void Shoot_t::SetTriggerPos(float position)
+void Shoot_t::SetTriggerPos(float pos)
 {
-    Trigger_Position.ref = Trigger_Position.fdb + position;
+    Trigger_Position.ref = Trigger_Position.fdb - pos;
 }
 
 /**
@@ -56,7 +56,7 @@ void Shoot_t::SetTriggerPos(float position)
  */
 void Shoot_t::SetTriggerSpeed(float speed)
 {
-    Trigger_Speed.ref = speed;
+    Trigger_Speed.ref = -speed;
 }
 
 /**
@@ -121,7 +121,7 @@ void Shoot_t::Control()
 void Shoot_t::Stop()
 {
     for (short i = 0; i < 2; ++i) {
-        Friction_Speed[i].output = 0.0f;
+        Friction_Current[i].output = 0.0f;
     }
     Trigger_Current.output = 0.0f;
 }

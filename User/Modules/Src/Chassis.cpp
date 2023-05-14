@@ -33,3 +33,10 @@ void Chassis_t::FollowCtrl()
     } else {
     }
 }
+
+void Chassis_t::Stop()
+{
+    Pack.x_speed = 0;
+    Pack.y_speed = 0;
+    Pack.r_speed = 0;
+}

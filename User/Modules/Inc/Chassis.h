@@ -37,14 +37,15 @@ class Chassis_t
 {
    public:
     Chassis_s Pack;
-    PID_Def Chassis_Follow;
+    PID_Def Follow;
     void FollowCtrl();
+    void Stop();
 };
 
 /* Exported variables --------------------------------------------------------*/
 extern int16_t Yaw_Encoder;
 extern int16_t Target_Encoder;
-
+extern Chassis_t Chassis;
 /* Exported function prototypes ----------------------------------------------*/
 
 #endif
