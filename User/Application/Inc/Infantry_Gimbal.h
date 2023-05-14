@@ -36,6 +36,7 @@ class Infantry_Gimbal_t
    private:
 };
 /* Exported variables --------------------------------------------------------*/
+extern Infantry_Gimbal_t Infantry_Gimbal;
 /* Exported function prototypes ----------------------------------------------*/
 
 #endif
