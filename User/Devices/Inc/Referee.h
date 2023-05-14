@@ -336,6 +336,32 @@ typedef struct
     uint16_t keyboard_value;
     uint16_t reserved;
 } ext_robot_command_t;
+struct Referee_Keyboard {
+    uint8_t isPressed;
+    uint8_t isTicked;
+    uint8_t LastState;
+};
+
+enum {
+    REFEREE_KEY_W = 0,
+    REFEREE_KEY_S,
+    REFEREE_KEY_A,
+    REFEREE_KEY_D,
+    REFEREE_KEY_SHIFT,
+    REFEREE_KEY_CTRL,
+    REFEREE_KEY_Q,
+    REFEREE_KEY_E,
+    REFEREE_KEY_R,
+    REFEREE_KEY_F,
+    REFEREE_KEY_G,
+    REFEREE_KEY_Z,
+    REFEREE_KEY_X,
+    REFEREE_KEY_C,
+    REFEREE_KEY_V,
+    REFEREE_KEY_B,
+    REFEREE_MOUSE_L,
+    REFEREE_MOUSE_R,
+};
 
 class Referee_Def
 {
@@ -358,8 +384,10 @@ class Referee_Def
     ext_SendClientData_t ShowData;    // 客户端信息
     ext_CommunatianData_t CommuData;  // 队友通信信息
     ext_robot_command_t CommaData;    // 图传链路
+    Referee_Keyboard Referee_KeyState[18];
 
     void DataPack(uint8_t* pData);
+    void KeyProcess();
 
    private:
 };

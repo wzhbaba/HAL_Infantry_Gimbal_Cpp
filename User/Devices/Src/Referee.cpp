@@ -103,6 +103,7 @@ void Referee_Def::DataPack(uint8_t* pData)
 
                     case ID_command_data:  // 0x0304
                         memcpy(&CommaData, (pData + DATA), LEN_command_data);
+                        KeyProcess();
                         break;
                 }
             }
@@ -112,5 +113,37 @@ void Referee_Def::DataPack(uint8_t* pData)
             // 如果一个数据包出现了多帧数据,则再次调用解析函数,直到所有数据包解析完毕
             DataPack(pData + sizeof(xFrameHeader) + LEN_CMDID + FrameHeader.DataLength + LEN_TAIL);
         }
+    }
+}
+
+void Referee_Def::KeyProcess()
+{
+    for (short i = 0; i < 16; i++) {
+        if (CommaData.keyboard_value && (0x01 << i)) {
+            Referee_KeyState[i].isPressed = 1;
+        } else {
+            Referee_KeyState[i].isPressed = 0;
+        }
+
+        if (Referee_KeyState[i].isPressed == 1 && Referee_KeyState[i].LastState == 0) {
+            Referee_KeyState[i].isTicked++;
+        }
+
+        if (Referee_KeyState[i].isTicked % 2 == 0) {
+            Referee_KeyState[i].isTicked = 0;
+        }
+
+        Referee_KeyState[i].LastState = Referee_KeyState[i].isPressed;
+    }
+
+    if (CommaData.left_button_down == 0x01) {
+        Referee_KeyState[REFEREE_MOUSE_L].isPressed = 1;
+    } else {
+        Referee_KeyState[REFEREE_MOUSE_L].isPressed = 0;
+    }
+    if (CommaData.right_button_down == 0x01) {
+        Referee_KeyState[REFEREE_MOUSE_R].isPressed = 1;
+    } else {
+        Referee_KeyState[REFEREE_MOUSE_R].isPressed = 0;
     }
 }

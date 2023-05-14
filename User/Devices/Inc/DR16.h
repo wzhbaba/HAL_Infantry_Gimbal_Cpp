@@ -24,6 +24,27 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+enum {
+    DR16_KEY_W = 0,
+    DR16_KEY_S,
+    DR16_KEY_A,
+    DR16_KEY_D,
+    DR16_KEY_SHIFT,
+    DR16_KEY_CTRL,
+    DR16_KEY_Q,
+    DR16_KEY_E,
+    DR16_KEY_R,
+    DR16_KEY_F,
+    DR16_KEY_G,
+    DR16_KEY_Z,
+    DR16_KEY_X,
+    DR16_KEY_C,
+    DR16_KEY_V,
+    DR16_KEY_B,
+    DR16_MOUSE_L,
+    DR16_MOUSE_R,
+};
+
 struct DR16_DatePack_t {
     int16_t ch0;
     int16_t ch1;
@@ -38,11 +59,18 @@ struct DR16_DatePack_t {
     uint8_t press_r;
     uint16_t key;
 };
+struct DR16_Keyboard {
+    uint8_t isPressed;
+    uint8_t isTicked;
+    uint8_t LastState;
+};
 class DBUS_Def
 {
    public:
     DR16_DatePack_t Pack;
+    DR16_Keyboard DR16_KeyState[18];
     void SbusToRc(uint8_t *pData);
+    void KeyProcess();
 
    private:
 };
