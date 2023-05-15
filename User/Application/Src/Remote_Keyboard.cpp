@@ -68,6 +68,6 @@ void RemoteShootCtrl()
     }
     if (Remote.Pack.s1 == 2) {
         Shoot.Shoot_Flag = SPEED_FLAG;
-        Shoot.SetTriggerSpeed(3.0f * 60 * 36.0f);
+        Shoot.SetTriggerSpeed(3.125f * 60 * 36.0f);
     }
 }

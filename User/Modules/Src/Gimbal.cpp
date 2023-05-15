@@ -24,7 +24,7 @@ Gimbal_t Gimbal;
 
 void Gimbal_t::SetPitchPosition(float set)
 {
-    Position[0].ref += set;
+    Position[0].ref -= set;
     VAL_LIMIT(Position[0].ref, -20.0f, 45.0f);
 }
 
