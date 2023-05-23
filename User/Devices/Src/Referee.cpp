@@ -120,30 +120,30 @@ void Referee_Def::KeyProcess()
 {
     for (short i = 0; i < 16; i++) {
         if (CommaData.keyboard_value && (0x01 << i)) {
-            Referee_KeyState[i].isPressed = 1;
+            KeyState[i].isPressed = 1;
         } else {
-            Referee_KeyState[i].isPressed = 0;
+            KeyState[i].isPressed = 0;
         }
 
-        if (Referee_KeyState[i].isPressed == 1 && Referee_KeyState[i].LastState == 0) {
-            Referee_KeyState[i].isTicked++;
+        if (KeyState[i].isPressed == 1 && KeyState[i].LastState == 0) {
+            KeyState[i].isTicked++;
         }
 
-        if (Referee_KeyState[i].isTicked % 2 == 0) {
-            Referee_KeyState[i].isTicked = 0;
+        if (KeyState[i].isTicked % 2 == 0) {
+            KeyState[i].isTicked = 0;
         }
 
-        Referee_KeyState[i].LastState = Referee_KeyState[i].isPressed;
+        KeyState[i].LastState = KeyState[i].isPressed;
     }
 
     if (CommaData.left_button_down == 0x01) {
-        Referee_KeyState[REFEREE_MOUSE_L].isPressed = 1;
+        KeyState[REFEREE_MOUSE_L].isPressed = 1;
     } else {
-        Referee_KeyState[REFEREE_MOUSE_L].isPressed = 0;
+        KeyState[REFEREE_MOUSE_L].isPressed = 0;
     }
     if (CommaData.right_button_down == 0x01) {
-        Referee_KeyState[REFEREE_MOUSE_R].isPressed = 1;
+        KeyState[REFEREE_MOUSE_R].isPressed = 1;
     } else {
-        Referee_KeyState[REFEREE_MOUSE_R].isPressed = 0;
+        KeyState[REFEREE_MOUSE_R].isPressed = 0;
     }
 }
