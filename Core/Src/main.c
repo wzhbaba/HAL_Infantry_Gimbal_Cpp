@@ -18,13 +18,15 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
+
 #include "can.h"
+#include "cmsis_os.h"
 #include "dma.h"
+#include "gpio.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
-#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -100,20 +102,22 @@ int main(void)
   MX_UART8_Init();
   MX_SPI5_Init();
   MX_USART3_UART_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
     UserSystemCommInit();
+    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 520);
+    /* USER CODE END 2 */
 
-  /* USER CODE END 2 */
+    /* Call init function for freertos objects (in freertos.c) */
+    MX_FREERTOS_Init();
 
-  /* Call init function for freertos objects (in freertos.c) */
-  MX_FREERTOS_Init();
+    /* Start scheduler */
+    osKernelStart();
 
-  /* Start scheduler */
-  osKernelStart();
-
-  /* We should never get here as control is now taken by the scheduler */
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+    /* We should never get here as control is now taken by the scheduler */
+    /* Infinite loop */
+    /* USER CODE BEGIN WHILE */
     while (1) {
     /* USER CODE END WHILE */
 

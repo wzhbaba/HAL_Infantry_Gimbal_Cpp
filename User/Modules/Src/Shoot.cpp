@@ -44,7 +44,7 @@ void Shoot_t::SetFricSpeed(float speed)
  */
 void Shoot_t::SetTriggerPos(float pos)
 {
-    Trigger_Position.ref = Trigger_Position.fdb - pos;
+    Trigger_Position.ref = Trigger_Motor.angle_real - pos;
 }
 
 /**

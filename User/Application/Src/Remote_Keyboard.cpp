@@ -18,6 +18,7 @@
 #include "DR16.h"
 #include "Infantry_Gimbal.h"
 #include "Referee.h"
+#include "tim.h"
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private types -------------------------------------------------------------*/
@@ -133,6 +134,12 @@ void KeyboardShootCtrl()
 
     static float shoot_speed;
 
+    if (Remote.KeyState[REFEREE_KEY_B].isTicked == 1) {
+        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 810);
+    } else {
+        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 520);
+    }
+
     if (Remote.KeyState[DR16_KEY_F].isTicked == 1) {
         if (Referee.GameRobotStat.shooter_id1_17mm_speed_limit == 15) {
             Shoot.SetFricSpeed(4500.0f);
@@ -146,8 +153,8 @@ void KeyboardShootCtrl()
 
         if (Remote.KeyState[DR16_KEY_G].isTicked == 1) {
             if (change_flag == 1) {
-                Shoot.Shoot_Flag = ANGLE_FLAG;
                 Shoot.SetTriggerPos(0.0f);
+                Shoot.Shoot_Flag = ANGLE_FLAG;
                 change_flag = 0;
             }
             if (count_flag) {
@@ -157,6 +164,11 @@ void KeyboardShootCtrl()
                     count_flag = 0;
                     shoot_allow_flag = 1;
                 }
+            }
+            if (Remote.KeyState[DR16_KEY_V].isTicked == 1 || reserve_flag == 1) {
+                Shoot.SetTriggerPos(-45 * 36.0f);
+                Remote.KeyState[DR16_KEY_V].isTicked = 0;
+                reserve_flag = 0;
             }
             if (Remote.KeyState[DR16_MOUSE_L].isPressed == 0) {
                 flag = 1;
@@ -171,11 +183,11 @@ void KeyboardShootCtrl()
             if (Remote.KeyState[REFEREE_MOUSE_L].isPressed == 1) {
                 Shoot.Shoot_Flag = SPEED_FLAG;
                 Shoot.SetTriggerSpeed(3.125f * 60 * 36.0f);
-                reserve_flag = 1;
             } else {
                 Shoot.SetTriggerSpeed(0.0f);
                 count_flag = 1;
             }
+            reserve_flag = 1;
             change_flag = 1;
         }
     } else {
