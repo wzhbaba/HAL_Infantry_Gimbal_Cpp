@@ -91,11 +91,11 @@ void UserCAN1DataUpdate(CANx_Message* CANx_RxMsg)
 {
     if (CANx_RxMsg->ID == 0x206) {
         Gimbal_Motor[1].Update(CANx_RxMsg->Data);
-        Yaw_Encoder = Gimbal_Motor[1].encode;
-        if (Yaw_Encoder - Target_Encoder > 4096) {
-            Yaw_Encoder -= 8192;
-        } else if (Yaw_Encoder - Target_Encoder < 4096) {
-            Yaw_Encoder += 8192;
+        Chassis.Yaw_Encoder = Gimbal_Motor[1].encode;
+        if (Chassis.Yaw_Encoder - Chassis.Target_Encoder > 4096) {
+            Chassis.Yaw_Encoder -= 8192;
+        } else if (Chassis.Yaw_Encoder - Chassis.Target_Encoder < -4096) {
+            Chassis.Yaw_Encoder += 8192;
         }
     }
 }
@@ -245,7 +245,7 @@ void VisionSendTask()
     static uint8_t Tx[13];
     static int SendAngle[2];
 
-    SendAngle[0] = (int)((IMU.Euler[0] + 180) * 10);  // pitch
+    SendAngle[0] = (int)((IMU.Euler[1] + 180) * 10);  // pitch
     SendAngle[1] = (int)((IMU.Yaw + 180) * 10);       // yaw
 
     Tx[0] = 'R';
@@ -268,5 +268,5 @@ void VisionSendTask()
     Tx[11] = SendAngle[0] % 10 + 48;
     Tx[12] = '0';
 
-    UserUARTSendData(&huart7, Tx, 13, UART_TRANSMIT_IT);
+    UserUARTSendData(&huart7, Tx, 13u, UART_TRANSMIT_IT);
 }
