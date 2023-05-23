@@ -44,7 +44,7 @@ void Vision_Def::DataPack(uint8_t *pData)
             Vision_Last[1] = Pitch_Angle;
             Vision_Last[2] = Distance;
         } else {
-            Yaw_Angle = 0.0f;
+            Yaw_Angle = Vision_Last[0];
             Pitch_Angle = Vision_Last[1];
             Distance = Vision_Last[2];
         }

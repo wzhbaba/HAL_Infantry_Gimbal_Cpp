@@ -24,7 +24,7 @@ Gimbal_t Gimbal;
 
 void Gimbal_t::SetPitchPosition(float set)
 {
-    Position[0].ref -= set;
+    Position[0].ref += set;
     VAL_LIMIT(Position[0].ref, -20.0f, 45.0f);
 }
 
@@ -33,9 +33,26 @@ void Gimbal_t::SetYawPosition(float set)
     Position[1].ref -= set;
 }
 
+void Gimbal_t::SetVisionPitchPos(float set)
+{
+    Position[0].ref = set;
+}
+
+void Gimbal_t::SetVisionYawPos(float set)
+{
+    static float temp;
+    temp = set - IMU.Yaw;
+    if (temp < -180.0f) {
+        temp += 360.0f;
+    } else if (temp > 180.0f) {
+        temp -= 360.0f;
+    }
+    Position[1].ref = temp + IMU.Euler[2];
+}
+
 void Gimbal_t::AngleCalc()
 {
-    Position[0].fdb = IMU.Euler[0];
+    Position[0].fdb = IMU.Euler[1];
     Position[1].fdb = IMU.Euler[2];
 
     for (short i = 0; i < 2; ++i) {
@@ -46,7 +63,7 @@ void Gimbal_t::AngleCalc()
 void Gimbal_t::SpeedCalc()
 {
     Speed[0].ref = Position[0].output;
-    Speed[0].fdb = IMU.Gyro[1] * 60.0f / 360.0f;
+    Speed[0].fdb = IMU.Gyro[0] * 60.0f / 360.0f;
     Speed[1].ref = Position[1].output;
     Speed[1].fdb = IMU.Gyro[2] * 60.0f / 360.0f;
 
@@ -58,7 +75,7 @@ void Gimbal_t::SpeedCalc()
 void Gimbal_t::Stop()
 {
     for (short i = 0; i < 2; ++i) {
-        Current[i].output = 0.0f;
+        Speed[i].output = 0.0f;
     }
 }
 

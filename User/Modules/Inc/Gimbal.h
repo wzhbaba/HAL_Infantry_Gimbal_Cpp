@@ -36,7 +36,8 @@ class Gimbal_t
     void Control();
     void AngleCalc();
     void SpeedCalc();
-    void CurrentCalc();
+    void SetVisionPitchPos(float set);
+    void SetVisionYawPos(float set);
     void SetPitchPosition(float set);
     void SetYawPosition(float set);
 };
