@@ -24,6 +24,9 @@
 void RemoteChassisCtrl();
 void RemoteGimbalCtrl();
 void RemoteShootCtrl();
+void KeyboardChassisCtrl();
+void KeyboardGimbalCtrl();
+void KeyboardShootCtrl();
 /* Private variables ---------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -35,6 +38,9 @@ void ModeTask()
         RemoteGimbalCtrl();
         RemoteShootCtrl();
     } else if (Remote.Pack.s2 == 3) {
+        KeyboardChassisCtrl();
+        KeyboardGimbalCtrl();
+        KeyboardShootCtrl();
     } else if (Remote.Pack.s2 == 2) {
         Infantry_Gimbal.Stop();
     }
@@ -48,10 +54,21 @@ void RemoteChassisCtrl()
 
 void RemoteGimbalCtrl()
 {
-    Gimbal.SetPitchPosition((Remote.Pack.ch1 / 660.0f) * 0.25f);
-    Gimbal.SetYawPosition((Remote.Pack.ch0 / 660.0f) * 0.25f);
+    if (Remote.Pack.s1 == 1) {
+        Gimbal.SetVisionPitchPos(Vision.Pitch_Angle);
+        Gimbal.SetVisionYawPos(Vision.Yaw_Angle);
+    } else {
+        Gimbal.SetPitchPosition((Remote.Pack.ch1 / 660.0f) * 0.25f);
+        Gimbal.SetYawPosition((Remote.Pack.ch0 / 660.0f) * 0.25f);
+    }
 }
 
+/**
+ * @brief
+ *   @arg       None
+ * @retval      None
+ * @note        None
+ */
 void RemoteShootCtrl()
 {
     static uint8_t flag = 0;
@@ -69,5 +86,99 @@ void RemoteShootCtrl()
     if (Remote.Pack.s1 == 2) {
         Shoot.Shoot_Flag = SPEED_FLAG;
         Shoot.SetTriggerSpeed(3.125f * 60 * 36.0f);
+    }
+}
+
+void KeyboardChassisCtrl()
+{
+    if (Remote.KeyState[DR16_KEY_W].isPressed == 1) {
+        Chassis.Pack.y_target = 660;
+    } else if (Remote.KeyState[DR16_KEY_S].isPressed == 1) {
+        Chassis.Pack.y_target = -660;
+    } else {
+        Chassis.Pack.y_target = 0;
+    }
+
+    if (Remote.KeyState[DR16_KEY_A].isPressed == 1) {
+        Chassis.Pack.x_target = -660;
+    } else if (Remote.KeyState[DR16_KEY_D].isPressed == 1) {
+        Chassis.Pack.x_target = 660;
+    } else {
+        Chassis.Pack.x_target = 0;
+    }
+
+    if (Remote.KeyState[DR16_KEY_SHIFT].isPressed == 1) {
+        Chassis.Pack.r_target = 660;
+        Chassis.rotate_flag = 1;
+    } else {
+        Chassis.Pack.r_target = 0;
+        Chassis.rotate_flag = 0;
+    }
+}
+
+void KeyboardGimbalCtrl()
+{
+    Gimbal.SetPitchPosition(-Remote.Pack.mouse_y * 0.005f);
+    Gimbal.SetYawPosition(Remote.Pack.mouse_x * 0.004f);
+}
+
+void KeyboardShootCtrl()
+{
+    static uint8_t flag = 0;
+    static uint8_t reserve_flag = 0;
+    static uint16_t time_out = 0;
+    static uint8_t shoot_allow_flag = 0;
+    static uint8_t count_flag = 1;
+    static uint8_t change_flag = 1;
+
+    static float shoot_speed;
+
+    if (Remote.KeyState[DR16_KEY_F].isTicked == 1) {
+        if (Referee.GameRobotStat.shooter_id1_17mm_speed_limit == 15) {
+            Shoot.SetFricSpeed(4500.0f);
+        } else if (Referee.GameRobotStat.shooter_id1_17mm_speed_limit == 18) {
+            Shoot.SetFricSpeed(5500.0f);
+        } else if (Referee.GameRobotStat.shooter_id1_17mm_speed_limit == 30) {
+            Shoot.SetFricSpeed(7000.0f);
+        } else {
+            Shoot.SetFricSpeed(4500.0f);
+        }
+
+        if (Remote.KeyState[DR16_KEY_G].isTicked == 1) {
+            if (change_flag == 1) {
+                Shoot.Shoot_Flag = ANGLE_FLAG;
+                Shoot.SetTriggerPos(0.0f);
+                change_flag = 0;
+            }
+            if (count_flag) {
+                time_out++;
+                if (time_out >= 150) {
+                    time_out = 0;
+                    count_flag = 0;
+                    shoot_allow_flag = 1;
+                }
+            }
+            if (Remote.KeyState[DR16_MOUSE_L].isPressed == 0) {
+                flag = 1;
+            }
+            if (Remote.KeyState[REFEREE_MOUSE_L].isPressed == 1 && flag == 1 && shoot_allow_flag == 1) {
+                Shoot.SetTriggerPos(45 * 36.0f);
+                flag = 0;
+                shoot_allow_flag = 0;
+                count_flag = 1;
+            }
+        } else {
+            if (Remote.KeyState[REFEREE_MOUSE_L].isPressed == 1) {
+                Shoot.Shoot_Flag = SPEED_FLAG;
+                Shoot.SetTriggerSpeed(3.125f * 60 * 36.0f);
+                reserve_flag = 1;
+            } else {
+                Shoot.SetTriggerSpeed(0.0f);
+                count_flag = 1;
+            }
+            change_flag = 1;
+        }
+    } else {
+        Shoot.SetFricSpeed(0.0f);
     }
 }
