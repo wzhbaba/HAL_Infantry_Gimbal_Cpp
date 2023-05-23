@@ -38,13 +38,15 @@ class Chassis_t
    public:
     Chassis_s Pack;
     PID_Def Follow;
+    int16_t Yaw_Encoder;
+    int16_t Target_Encoder = 5145;
+    uint8_t rotate_flag;
+
     void FollowCtrl();
     void Stop();
 };
 
 /* Exported variables --------------------------------------------------------*/
-extern int16_t Yaw_Encoder;
-extern int16_t Target_Encoder;
 extern Chassis_t Chassis;
 /* Exported function prototypes ----------------------------------------------*/
 

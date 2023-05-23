@@ -20,8 +20,6 @@
 /* Private variables ---------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 Chassis_t Chassis;
-int16_t Yaw_Encoder = 0;
-int16_t Target_Encoder = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -29,8 +27,14 @@ void Chassis_t::FollowCtrl()
 {
     Pack.x_speed = -arm_sin_f32(Gimbal_Motor[1].angle_real / 180 * PI) * Pack.y_target + arm_cos_f32(Gimbal_Motor[1].angle_real / 180 * PI) * Pack.x_target;
     Pack.y_speed = arm_cos_f32(Gimbal_Motor[1].angle_real / 180 * PI) * Pack.y_target + arm_sin_f32(Gimbal_Motor[1].angle_real / 180 * PI) * Pack.x_target;
-    if (0) {
+
+    if (rotate_flag == 1) {
+        Pack.r_speed = Pack.r_target;
     } else {
+        Follow.ref = Yaw_Encoder;
+        Follow.fdb = Target_Encoder;
+        Follow.NormalCalc();
+        Pack.r_speed = Follow.output;
     }
 }
 
