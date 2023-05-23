@@ -68,7 +68,7 @@ class DBUS_Def
 {
    public:
     DR16_DatePack_t Pack;
-    DR16_Keyboard DR16_KeyState[18];
+    DR16_Keyboard KeyState[18];
     void SbusToRc(uint8_t *pData);
     void KeyProcess();
 

@@ -52,36 +52,40 @@ void DBUS_Def::SbusToRc(uint8_t* pData)
     Pack.ch1 -= 1024;
     Pack.ch2 -= 1024;
     Pack.ch3 -= 1024;
+
+    KeyProcess();
 }
 
 void DBUS_Def::KeyProcess()
 {
     for (short i = 0; i < 16; i++) {
-        if (Pack.key && (0x01 << i)) {
-            DR16_KeyState[i].isPressed = 1;
+        if (Pack.key & (0x01 << i)) {
+            KeyState[i].isPressed = 1;
         } else {
-            DR16_KeyState[i].isPressed = 0;
+            KeyState[i].isPressed = 0;
         }
-
-        if (DR16_KeyState[i].isPressed == 1 && DR16_KeyState[i].LastState == 0) {
-            DR16_KeyState[i].isTicked++;
-        }
-
-        if (DR16_KeyState[i].isTicked % 2 == 0) {
-            DR16_KeyState[i].isTicked = 0;
-        }
-
-        DR16_KeyState[i].LastState = DR16_KeyState[i].isPressed;
     }
 
     if (Pack.press_l == 0x01) {
-        DR16_KeyState[DR16_MOUSE_L].isPressed = 1;
+        KeyState[DR16_MOUSE_L].isPressed = 1;
     } else {
-        DR16_KeyState[DR16_MOUSE_L].isPressed = 0;
+        KeyState[DR16_MOUSE_L].isPressed = 0;
     }
     if (Pack.press_r == 0x01) {
-        DR16_KeyState[DR16_MOUSE_R].isPressed = 1;
+        KeyState[DR16_MOUSE_R].isPressed = 1;
     } else {
-        DR16_KeyState[DR16_MOUSE_R].isPressed = 0;
+        KeyState[DR16_MOUSE_R].isPressed = 0;
+    }
+
+    for (short i = 0; i < 18; i++) {
+            if (KeyState[i].isPressed == 1 && KeyState[i].LastState == 0) {
+            KeyState[i].isTicked++;
+        }
+
+        if (KeyState[i].isTicked % 2 == 0) {
+            KeyState[i].isTicked = 0;
+        }
+
+        KeyState[i].LastState = KeyState[i].isPressed;
     }
 }

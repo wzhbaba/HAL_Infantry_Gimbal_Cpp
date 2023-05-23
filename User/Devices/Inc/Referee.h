@@ -183,8 +183,9 @@ typedef struct
     uint16_t chassis_current;
     float chassis_power;            // 瞬时功率
     uint16_t chassis_power_buffer;  // 60焦耳缓冲能量
-    uint16_t shooter_heat0;         // 17mm
-    uint16_t shooter_heat1;
+    uint16_t shooter_id1_17mm_cooling_heat;  // 17mm
+    uint16_t shooter_id2_17mm_cooling_heat;
+    uint16_t shooter_id1_42mm_cooling_heat;
 } ext_power_heat_data_t;
 
 /* ID: 0x0203  Byte: 16    机器人位置数据 */
@@ -336,7 +337,7 @@ typedef struct
     uint16_t keyboard_value;
     uint16_t reserved;
 } ext_robot_command_t;
-struct Referee_Keyboard {
+struct Keyboard {
     uint8_t isPressed;
     uint8_t isTicked;
     uint8_t LastState;
@@ -384,7 +385,7 @@ class Referee_Def
     ext_SendClientData_t ShowData;    // 客户端信息
     ext_CommunatianData_t CommuData;  // 队友通信信息
     ext_robot_command_t CommaData;    // 图传链路
-    Referee_Keyboard Referee_KeyState[18];
+    Keyboard KeyState[18];
 
     void DataPack(uint8_t* pData);
     void KeyProcess();
