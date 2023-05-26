@@ -147,3 +147,11 @@ void Referee_Def::KeyProcess()
         KeyState[REFEREE_MOUSE_R].isPressed = 0;
     }
 }
+
+void Referee_Def::BoardCommu(uint8_t can_rx_data[])
+{
+    Referee.PowerHeatData.shooter_id1_17mm_cooling_heat = can_rx_data[0] << 8 | can_rx_data[1];
+    Referee.GameRobotStat.shooter_id1_17mm_cooling_limit = can_rx_data[2] << 8 | can_rx_data[3];
+    Referee.GameRobotStat.shooter_id1_17mm_speed_limit = can_rx_data[4] << 8 | can_rx_data[5];
+    Referee.GameRobotStat.mains_power_shooter_output = can_rx_data[6] << 8 | can_rx_data[7];
+}

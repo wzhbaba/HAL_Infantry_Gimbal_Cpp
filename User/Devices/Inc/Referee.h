@@ -85,7 +85,7 @@ typedef enum {
     LEN_supply_projectile_action = 4,  // 0x0102
     //	LEN_game_robot_state = 15,		   // 0x0201
     LEN_game_robot_state = 27,    // 0x0201
-    LEN_power_heat_data = 14,     // 0x0202
+    LEN_power_heat_data = 16,     // 0x0202
     LEN_game_robot_pos = 16,      // 0x0203
     LEN_buff_musk = 1,            // 0x0204
     LEN_aerial_robot_energy = 1,  // 0x0205
@@ -389,6 +389,7 @@ class Referee_Def
 
     void DataPack(uint8_t* pData);
     void KeyProcess();
+    void BoardCommu(uint8_t can_rx_data[]);
 
    private:
 };
