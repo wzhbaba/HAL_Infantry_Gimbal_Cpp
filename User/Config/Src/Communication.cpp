@@ -97,6 +97,8 @@ void UserCAN1DataUpdate(CANx_Message* CANx_RxMsg)
         } else if (Chassis.Yaw_Encoder - Chassis.Target_Encoder < -4096) {
             Chassis.Yaw_Encoder += 8192;
         }
+    } else if (CANx_RxMsg->ID == 0x113) {
+        Referee.BoardCommu(CANx_RxMsg->Data);
     }
 }
 
