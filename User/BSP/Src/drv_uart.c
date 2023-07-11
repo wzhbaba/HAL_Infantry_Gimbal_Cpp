@@ -38,7 +38,7 @@ void UserUARTReceiveIT(UART_HandleTypeDef *huart, uint32_t length, UART_CallBack
         UART_Instance[0].huart = huart;
         UART_Instance[0].rx_buffer_size = length;
         UART_Instance[0].Function = Function;
-        HAL_UARTEx_ReceiveToIdle_DMA(huart, UART_Instance[0].rx_buffer, length);
+        HAL_UARTEx_ReceiveToIdle_DMA(UART_Instance[0].huart, UART_Instance[0].rx_buffer, UART_Instance[0].rx_buffer_size);
         __HAL_DMA_DISABLE_IT(UART_Instance[0].huart->hdmarx, DMA_IT_HT);
 
     }

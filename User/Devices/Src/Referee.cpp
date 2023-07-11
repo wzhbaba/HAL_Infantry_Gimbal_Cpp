@@ -53,54 +53,6 @@ void Referee_Def::DataPack(uint8_t* pData)
                 // 解析数据命令码,将数据拷贝到相应结构体中(注意拷贝数据的长度)
                 // 第8个字节开始才是数据 data=7
                 switch (CmdID) {
-                    case ID_game_state:  // 0x0001
-                        memcpy(&GameState, (pData + DATA), LEN_game_state);
-                        break;
-
-                    case ID_game_result:  // 0x0002
-                        memcpy(&GameResult, (pData + DATA), LEN_game_result);
-                        break;
-
-                    case ID_game_robot_survivors:  // 0x0003
-                        memcpy(&GameRobotHP, (pData + DATA), LEN_game_robot_HP);
-                        break;
-
-                    case ID_event_data:  // 0x0101
-                        memcpy(&EventData, (pData + DATA), LEN_event_data);
-                        break;
-
-                    case ID_supply_projectile_action:  // 0x0102
-                        memcpy(&SupplyProjectileAction, (pData + DATA), LEN_supply_projectile_action);
-                        break;
-
-                    case ID_game_robot_state:  // 0x0201
-                        memcpy(&GameRobotStat, (pData + DATA), LEN_game_robot_state);
-                        break;
-                    case ID_power_heat_data:  // 0x0202
-                        memcpy(&PowerHeatData, (pData + DATA), LEN_power_heat_data);
-                        break;
-
-                    case ID_game_robot_pos:  // 0x0203
-                        memcpy(&GameRobotPos, (pData + DATA), LEN_game_robot_pos);
-                        break;
-
-                    case ID_buff_musk:  // 0x0204
-                        memcpy(&BuffMusk, (pData + DATA), LEN_buff_musk);
-                        break;
-
-                    case ID_aerial_robot_energy:  // 0x0205
-                        memcpy(&AerialRobotEnergy, (pData + DATA), LEN_aerial_robot_energy);
-                        break;
-
-                    case ID_robot_hurt:  // 0x0206
-                        memcpy(&RobotHurt, (pData + DATA), LEN_robot_hurt);
-                        break;
-
-                    case ID_shoot_data:  // 0x0207
-                        memcpy(&ShootData, (pData + DATA), LEN_shoot_data);
-                        // JUDGE_ShootNumCount();//发弹量统计
-                        break;
-
                     case ID_command_data:  // 0x0304
                         memcpy(&CommaData, (pData + DATA), LEN_command_data);
                         KeyProcess();
@@ -108,32 +60,17 @@ void Referee_Def::DataPack(uint8_t* pData)
                 }
             }
         }
-        // 首地址加帧长度,指向CRC16下一字节,用来判断是否为0xA5,从而判断一个数据包是否有多帧数据
-        if (*(pData + sizeof(xFrameHeader) + LEN_CMDID + FrameHeader.DataLength + LEN_TAIL) == 0xA5) {
-            // 如果一个数据包出现了多帧数据,则再次调用解析函数,直到所有数据包解析完毕
-            DataPack(pData + sizeof(xFrameHeader) + LEN_CMDID + FrameHeader.DataLength + LEN_TAIL);
-        }
     }
 }
 
 void Referee_Def::KeyProcess()
 {
     for (short i = 0; i < 16; i++) {
-        if (CommaData.keyboard_value && (0x01 << i)) {
+        if (CommaData.keyboard_value & (0x01 << i)) {
             KeyState[i].isPressed = 1;
         } else {
             KeyState[i].isPressed = 0;
         }
-
-        if (KeyState[i].isPressed == 1 && KeyState[i].LastState == 0) {
-            KeyState[i].isTicked++;
-        }
-
-        if (KeyState[i].isTicked % 2 == 0) {
-            KeyState[i].isTicked = 0;
-        }
-
-        KeyState[i].LastState = KeyState[i].isPressed;
     }
 
     if (CommaData.left_button_down == 0x01) {
@@ -145,6 +82,18 @@ void Referee_Def::KeyProcess()
         KeyState[REFEREE_MOUSE_R].isPressed = 1;
     } else {
         KeyState[REFEREE_MOUSE_R].isPressed = 0;
+    }
+
+    for (short i = 0; i < 18; i++) {
+        if (KeyState[i].isPressed == 1 && KeyState[i].LastState == 0) {
+            KeyState[i].isTicked++;
+        }
+
+        if (KeyState[i].isTicked % 2 == 0) {
+            KeyState[i].isTicked = 0;
+        }
+
+        KeyState[i].LastState = KeyState[i].isPressed;
     }
 }
 
