@@ -39,17 +39,18 @@ class Chassis_t
     Chassis_s Pack;
     PID_Def Follow;
     int16_t Yaw_Encoder;
-    int16_t Target_Encoder = 5145;
+    int16_t Target_Encoder = 5124;
     uint8_t rotate_flag;
     uint8_t cap_flag;
     uint8_t fric_flag;
     uint8_t aim_flag;
-    uint8_t covers_flag;
+    uint8_t servo_flag;
     uint8_t shoot_flag;
-    uint8_t ui_flag;
+    uint16_t ui_flag;
 
     void FollowCtrl();
     void Stop();
+    void FlagCommu();
 };
 
 /* Exported variables --------------------------------------------------------*/
