@@ -44,3 +44,8 @@ void Chassis_t::Stop()
     Pack.y_speed = 0;
     Pack.r_speed = 0;
 }
+
+void Chassis_t::FlagCommu()
+{
+    ui_flag = rotate_flag << 6 | cap_flag << 5 | fric_flag << 4 | aim_flag << 3 | servo_flag << 2 | shoot_flag << 1;
+}

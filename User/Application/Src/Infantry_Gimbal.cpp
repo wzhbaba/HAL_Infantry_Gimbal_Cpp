@@ -84,15 +84,16 @@ void Infantry_Gimbal_t::Stop()
  */
 void InfantryGimbalTask()
 {
-    if (Remote.Pack.s2 == 2) {
-        Infantry_Gimbal.Stop();
-    } else {
+    if (Remote.Pack.s2 == 1 || Remote.Pack.s2 == 3) {
         Infantry_Gimbal.Control();
+    } else {
+        Infantry_Gimbal.Stop();
     }
+    Chassis.FlagCommu();
     CANx_PackProcess_Data(&hcan1, 0x1FF, 0x08, 0, (int16_t)Gimbal.Speed[1].output, 0, 0);
     CANx_PackProcess_Data(&hcan2, 0x200, 0x08, (int16_t)Shoot.Friction_Current[0].output, (int16_t)Shoot.Friction_Current[1].output, (int16_t)Shoot.Trigger_Current.output, 0);
     CANx_PackProcess_Data(&hcan2, 0x1FF, 0x08, (int16_t)Gimbal.Speed[0].output, 0, 0, 0);
-    CANx_PackProcess_Data(&hcan1, 0x112, 0x08, (int16_t)Chassis.Pack.x_speed, (int16_t)Chassis.Pack.y_speed, (int16_t)Chassis.Pack.r_speed, 0);
+    CANx_PackProcess_Data(&hcan1, 0x112, 0x08, (int16_t)Chassis.Pack.x_speed, (int16_t)Chassis.Pack.y_speed, (int16_t)Chassis.Pack.r_speed, Chassis.ui_flag);
 
     VOFA.SendData4(Gimbal.Position[0].output, Gimbal.Position[1].output, Gimbal.Speed[0].output, Gimbal.Speed[1].output);
 }
