@@ -32,6 +32,7 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "drv_can.h"
+#include "drv_uart.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
